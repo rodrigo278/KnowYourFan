@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#121212"/>
+  <path d="M40,100 A60,60 0 1,1 160,100 A60,60 0 1,1 40,100 Z" fill="none" stroke="#FF5722" stroke-width="8"/>
+  <path d="M65,80 L95,80 L95,120 L65,120 Z" fill="#FF5722"/>
+  <path d="M105,80 L135,80 L135,120 L105,120 Z" fill="#FF5722"/>
+  <path d="M65,130 L135,130 L135,140 L65,140 Z" fill="#FF5722"/>
+  <text x="100" y="170" font-family="Arial" font-size="16" fill="#FFFFFF" text-anchor="middle">KNOW YOUR FAN</text>
+</svg>
