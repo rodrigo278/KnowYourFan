@@ -419,22 +419,22 @@ elif st.session_state.step == 5:
             else:
                 st.info("Nenhum dado de interesse disponível. Complete a etapa 2 para ver a visualização de seus interesses.")
         
-        # Social media insights
-        st.markdown("### Social Media Insights")
+        # Insights de redes sociais
+        st.markdown("### Insights de Redes Sociais")
         
         col1, col2 = st.columns(2)
         
         with col1:
             if 'analysis' in st.session_state.user_data['social_media']:
-                # Create activity timeline
+                # Criar linha do tempo de atividade
                 fig = create_activity_timeline(st.session_state.user_data['social_media']['analysis'])
                 st.plotly_chart(fig, use_container_width=True)
             else:
-                st.info("No social media data available. Connect your accounts to see insights.")
+                st.info("Nenhum dado de redes sociais disponível. Conecte suas contas para ver insights.")
         
         with col2:
-            # Connected accounts
-            st.markdown("### Connected Accounts")
+            # Contas conectadas
+            st.markdown("### Contas Conectadas")
             
             social_media = st.session_state.user_data['social_media']
             esports_profiles = st.session_state.user_data['esports_profiles']
@@ -444,42 +444,42 @@ elif st.session_state.step == 5:
                     if platform in ['twitter_username', 'instagram_username', 'facebook_profile', 'discord_username'] and username:
                         st.markdown(f"- **{platform.replace('_username', '').replace('_profile', '').title()}**: {username}")
             else:
-                st.info("No social media accounts connected.")
+                st.info("Nenhuma conta de rede social conectada.")
             
-            st.markdown("### Esports Platforms")
+            st.markdown("### Plataformas de Esports")
             
             if any(esports_profiles.get(platform) for platform in ['twitch_username', 'steam_profile']):
                 for platform, username in esports_profiles.items():
                     if platform in ['twitch_username', 'steam_profile'] and username:
                         st.markdown(f"- **{platform.replace('_username', '').replace('_profile', '').title()}**: {username}")
             else:
-                st.info("No esports platform accounts connected.")
+                st.info("Nenhuma conta de plataforma de esports conectada.")
         
-        # Recommendations based on profile
-        st.markdown("### Personalized Recommendations")
+        # Recomendações baseadas no perfil
+        st.markdown("### Recomendações Personalizadas")
         
         recommendations_col1, recommendations_col2, recommendations_col3 = st.columns(3)
         
         with recommendations_col1:
-            st.markdown("#### Upcoming Events")
-            st.markdown("- FURIA vs. Liquid - June 15")
-            st.markdown("- ESL Pro League Season 18 - July 2023")
-            st.markdown("- GamesCon Brazil - September 2023")
+            st.markdown("#### Próximos Eventos")
+            st.markdown("- FURIA vs. Liquid - 15 de Junho")
+            st.markdown("- ESL Pro League Temporada 18 - Julho 2023")
+            st.markdown("- GamesCon Brasil - Setembro 2023")
         
         with recommendations_col2:
-            st.markdown("#### Merchandise")
-            st.markdown("- Limited Edition Team Jersey")
-            st.markdown("- Gaming Peripherals Bundle")
-            st.markdown("- Collectible Championship Memorabilia")
+            st.markdown("#### Produtos")
+            st.markdown("- Camiseta de Edição Limitada do Time")
+            st.markdown("- Pacote de Periféricos de Gaming")
+            st.markdown("- Itens Colecionáveis do Campeonato")
         
         with recommendations_col3:
-            st.markdown("#### Community")
-            st.markdown("- Join the Official Discord")
-            st.markdown("- Follow Team Social Media")
-            st.markdown("- Participate in Fan Contests")
+            st.markdown("#### Comunidade")
+            st.markdown("- Entre no Discord Oficial")
+            st.markdown("- Siga as Redes Sociais do Time")
+            st.markdown("- Participe de Concursos para Fãs")
         
-        # Fan images gallery
-        st.markdown("### Esports Fan Community")
+        # Galeria de imagens de fãs
+        st.markdown("### Comunidade de Fãs de Esports")
         
         gallery_col1, gallery_col2, gallery_col3, gallery_col4 = st.columns(4)
         
@@ -495,27 +495,27 @@ elif st.session_state.step == 5:
         with gallery_col4:
             st.image("https://images.unsplash.com/photo-1467810563316-b5476525c0f9", use_column_width=True)
         
-        # Export data option
-        st.markdown("### Data Management")
+        # Opção de exportar dados
+        st.markdown("### Gerenciamento de Dados")
         
         export_col1, export_col2 = st.columns(2)
         
         with export_col1:
-            if st.button("Export Profile Data"):
-                # Convert the data to JSON
+            if st.button("Exportar Dados do Perfil"):
+                # Converter os dados para JSON
                 profile_json = json.dumps(st.session_state.user_data, indent=4)
                 
-                # Create a download button
+                # Criar um botão de download
                 st.download_button(
-                    label="Download JSON",
+                    label="Baixar JSON",
                     data=profile_json,
-                    file_name="esports_fan_profile.json",
+                    file_name="perfil_fa_esports.json",
                     mime="application/json"
                 )
         
         with export_col2:
-            if st.button("Start Over"):
-                # Reset session state
+            if st.button("Recomeçar"):
+                # Resetar o estado da sessão
                 st.session_state.user_data = {
                     'personal': {},
                     'interests': {},
@@ -527,17 +527,17 @@ elif st.session_state.step == 5:
                 st.session_state.progress = 0
                 st.rerun()
     else:
-        st.warning("No profile data available. Please complete the previous steps.")
+        st.warning("Nenhum dado de perfil disponível. Por favor, complete as etapas anteriores.")
         
-        if st.button("Start Profile Creation"):
+        if st.button("Iniciar Criação de Perfil"):
             st.session_state.step = 1
             st.rerun()
 
-# Footer
+# Rodapé
 st.markdown("---")
 st.markdown("""
 <div style="text-align: center">
-    <p>Know Your Fan Platform &copy; 2023 - Connecting Esports Fans Worldwide</p>
-    <p>Privacy Policy | Terms of Service | Data Protection</p>
+    <p>Plataforma Conheça Seu Fã &copy; 2023 - Conectando Fãs de Esports em Todo o Mundo</p>
+    <p>Política de Privacidade | Termos de Serviço | Proteção de Dados</p>
 </div>
 """, unsafe_allow_html=True)
