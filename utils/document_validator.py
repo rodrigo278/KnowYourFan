@@ -7,51 +7,51 @@ import re
 
 def process_image_ocr(uploaded_file):
     """
-    Process an uploaded image file with OCR to extract text.
+    Processa um arquivo de imagem carregado com OCR para extrair texto.
     
     Args:
-        uploaded_file: The uploaded file from Streamlit file_uploader
+        uploaded_file: O arquivo carregado pelo Streamlit file_uploader
         
     Returns:
-        str: Extracted text from the image
+        str: Texto extraído da imagem
     """
-    # Read the image file
+    # Ler o arquivo de imagem
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     image = cv2.imdecode(file_bytes, 1)
     
-    # Convert to grayscale
+    # Converter para escala de cinza
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     
-    # Apply threshold to get image with only black and white
+    # Aplicar limiar para obter imagem apenas em preto e branco
     thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
     
-    # Convert the processed image back to PIL Image for tesseract
+    # Converter a imagem processada de volta para PIL Image para o tesseract
     pil_img = Image.fromarray(thresh)
     
-    # Extract text using tesseract
+    # Extrair texto usando tesseract
     try:
         text = pytesseract.image_to_string(pil_img, lang='por+eng')
         return text
     except Exception as e:
-        print(f"Error in OCR processing: {e}")
+        print(f"Erro no processamento OCR: {e}")
         return ""
 
 def validate_document(extracted_text, personal_info):
     """
-    Validate the extracted text from a document against the user's personal information.
+    Valida o texto extraído de um documento comparando com as informações pessoais do usuário.
     
     Args:
-        extracted_text (str): Text extracted from the document image
-        personal_info (dict): User's personal information
+        extracted_text (str): Texto extraído da imagem do documento
+        personal_info (dict): Informações pessoais do usuário
         
     Returns:
-        tuple: (is_valid, message) - Whether the document is valid and a validation message
+        tuple: (is_valid, message) - Se o documento é válido e uma mensagem de validação
     """
-    # This is a simplified validation - in a real implementation, 
-    # you would use more sophisticated methods and actual ID verification
+    # Esta é uma validação simplificada - em uma implementação real, 
+    # você usaria métodos mais sofisticados e verificação real de ID
     
     if not extracted_text:
-        return False, "Could not extract text from the document. Please upload a clearer image."
+        return False, "Não foi possível extrair texto do documento. Por favor, carregue uma imagem mais clara."
     
     # Check if the name from personal info appears in the document
     name = personal_info.get('name', '').strip().lower()
@@ -72,19 +72,19 @@ def validate_document(extracted_text, personal_info):
                     found_cpfs_clean = [re.sub(r'[^\d]', '', found_cpf) for found_cpf in found_cpfs]
                     
                     if cpf_clean in found_cpfs_clean:
-                        return True, "Document validated successfully. Name and CPF match your profile."
+                        return True, "Documento validado com sucesso. Nome e CPF correspondem ao seu perfil."
                     else:
-                        return False, "Name found but CPF in the document doesn't match your profile."
+                        return False, "Nome encontrado, mas o CPF no documento não corresponde ao seu perfil."
                 else:
                     # If we couldn't find a CPF pattern, still accept if the name matches
-                    return True, "Document partially validated. Name matches but could not verify CPF."
+                    return True, "Documento parcialmente validado. Nome corresponde, mas não foi possível verificar o CPF."
             else:
                 # If CPF wasn't provided in personal info, accept based on name match
-                return True, "Document partially validated based on name match."
+                return True, "Documento parcialmente validado com base na correspondência do nome."
         else:
-            return False, "Name in the document doesn't match your profile."
+            return False, "O nome no documento não corresponde ao seu perfil."
     else:
-        return False, "Insufficient personal information to validate document."
+        return False, "Informações pessoais insuficientes para validar o documento."
 
 def find_document_type(extracted_text):
     """
