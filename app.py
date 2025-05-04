@@ -7,15 +7,15 @@ from utils.document_validator import validate_document, process_image_ocr
 from utils.social_media import extract_social_media_info, analyze_social_relevance
 from utils.data_visualization import create_interest_chart, create_activity_timeline
 
-# Page configuration
+# Configuração da página
 st.set_page_config(
-    page_title="Know Your Fan - Esports",
+    page_title="Conheça Seu Fã - Esports",
     page_icon="🎮",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Initialize session state variables if they don't exist
+# Inicializa as variáveis do estado da sessão se elas não existirem
 if 'step' not in st.session_state:
     st.session_state.step = 1
 if 'user_data' not in st.session_state:
@@ -29,7 +29,7 @@ if 'user_data' not in st.session_state:
 if 'progress' not in st.session_state:
     st.session_state.progress = 0
 
-# Functions to navigate through steps
+# Funções para navegar entre as etapas
 def next_step():
     if st.session_state.step < 5:
         st.session_state.step += 1
@@ -43,50 +43,50 @@ def prev_step():
 def save_form_data(form_data, category):
     st.session_state.user_data[category].update(form_data)
 
-# Header
+# Cabeçalho
 col1, col2 = st.columns([1, 5])
 with col1:
     st.image("assets/logo.svg", width=80)
 with col2:
-    st.title("Know Your Fan - Esports")
-    st.subheader("Build your fan profile to unlock exclusive experiences")
+    st.title("Conheça Seu Fã - Esports")
+    st.subheader("Crie seu perfil de fã para desbloquear experiências exclusivas")
 
-# Progress bar
+# Barra de progresso
 st.progress(st.session_state.progress)
 
-# Step indicators
+# Indicadores de etapa
 steps_col1, steps_col2, steps_col3, steps_col4, steps_col5 = st.columns(5)
 with steps_col1:
-    st.markdown(f"**{'1. Personal Info' if st.session_state.step != 1 else '→ 1. Personal Info'}**")
+    st.markdown(f"**{'1. Dados Pessoais' if st.session_state.step != 1 else '→ 1. Dados Pessoais'}**")
 with steps_col2:
-    st.markdown(f"**{'2. Interests' if st.session_state.step != 2 else '→ 2. Interests'}**")
+    st.markdown(f"**{'2. Interesses' if st.session_state.step != 2 else '→ 2. Interesses'}**")
 with steps_col3:
-    st.markdown(f"**{'3. Verification' if st.session_state.step != 3 else '→ 3. Verification'}**")
+    st.markdown(f"**{'3. Verificação' if st.session_state.step != 3 else '→ 3. Verificação'}**")
 with steps_col4:
-    st.markdown(f"**{'4. Social Media' if st.session_state.step != 4 else '→ 4. Social Media'}**")
+    st.markdown(f"**{'4. Redes Sociais' if st.session_state.step != 4 else '→ 4. Redes Sociais'}**")
 with steps_col5:
-    st.markdown(f"**{'5. Dashboard' if st.session_state.step != 5 else '→ 5. Dashboard'}**")
+    st.markdown(f"**{'5. Painel' if st.session_state.step != 5 else '→ 5. Painel'}**")
 
-# Step 1: Personal Information
+# Etapa 1: Informações Pessoais
 if st.session_state.step == 1:
-    st.header("Personal Information")
+    st.header("Informações Pessoais")
     
     with st.form("personal_info_form"):
         col1, col2 = st.columns(2)
         
         with col1:
-            name = st.text_input("Full Name", value=st.session_state.user_data['personal'].get('name', ''))
+            name = st.text_input("Nome Completo", value=st.session_state.user_data['personal'].get('name', ''))
             email = st.text_input("Email", value=st.session_state.user_data['personal'].get('email', ''))
             cpf = st.text_input("CPF", value=st.session_state.user_data['personal'].get('cpf', ''))
-            phone = st.text_input("Phone Number", value=st.session_state.user_data['personal'].get('phone', ''))
+            phone = st.text_input("Telefone", value=st.session_state.user_data['personal'].get('phone', ''))
         
         with col2:
-            address = st.text_input("Address", value=st.session_state.user_data['personal'].get('address', ''))
-            city = st.text_input("City", value=st.session_state.user_data['personal'].get('city', ''))
-            state = st.text_input("State", value=st.session_state.user_data['personal'].get('state', ''))
-            birth_date = st.date_input("Birth Date", value=datetime.strptime(st.session_state.user_data['personal'].get('birth_date', datetime.today().strftime('%Y-%m-%d')), '%Y-%m-%d') if 'birth_date' in st.session_state.user_data['personal'] else None)
+            address = st.text_input("Endereço", value=st.session_state.user_data['personal'].get('address', ''))
+            city = st.text_input("Cidade", value=st.session_state.user_data['personal'].get('city', ''))
+            state = st.text_input("Estado", value=st.session_state.user_data['personal'].get('state', ''))
+            birth_date = st.date_input("Data de Nascimento", value=datetime.strptime(st.session_state.user_data['personal'].get('birth_date', datetime.today().strftime('%Y-%m-%d')), '%Y-%m-%d') if 'birth_date' in st.session_state.user_data['personal'] else None)
         
-        submitted = st.form_submit_button("Save & Continue")
+        submitted = st.form_submit_button("Salvar e Continuar")
         
         if submitted:
             form_data = {
@@ -100,52 +100,56 @@ if st.session_state.step == 1:
                 'birth_date': birth_date.strftime('%Y-%m-%d') if birth_date else None
             }
             
-            # Validate required fields
+            # Validar campos obrigatórios
             required_fields = ['name', 'email', 'cpf']
             empty_fields = [field for field in required_fields if not form_data.get(field)]
             
             if empty_fields:
-                st.error(f"Please fill in the following required fields: {', '.join(empty_fields)}")
+                st.error(f"Por favor, preencha os seguintes campos obrigatórios: {', '.join(empty_fields)}")
             else:
                 save_form_data(form_data, 'personal')
                 next_step()
 
-# Step 2: Interests & Activities
+# Etapa 2: Interesses e Atividades
 elif st.session_state.step == 2:
-    st.header("Esports Interests & Activities")
+    st.header("Interesses e Atividades de Esports")
     
     with st.form("interests_form"):
-        # Favorite games
-        st.subheader("Favorite Games")
-        games_options = ["League of Legends", "Counter-Strike", "Valorant", "Dota 2", "Overwatch", "Fortnite", "Rainbow Six Siege", "Rocket League", "Other"]
-        favorite_games = st.multiselect("Select your favorite games", games_options, default=st.session_state.user_data['interests'].get('favorite_games', []))
+        # Jogos favoritos
+        st.subheader("Jogos Favoritos")
+        games_options = ["League of Legends", "Counter-Strike", "Valorant", "Dota 2", "Overwatch", "Fortnite", "Rainbow Six Siege", "Rocket League", "Outro"]
+        favorite_games = st.multiselect("Selecione seus jogos favoritos", games_options, default=st.session_state.user_data['interests'].get('favorite_games', []))
         
-        if "Other" in favorite_games:
-            other_games = st.text_input("Please specify other games", value=st.session_state.user_data['interests'].get('other_games', ''))
+        # Inicialize other_games para corrigir o erro de "possibly unbound"
+        other_games = ""
+        if "Outro" in favorite_games:
+            other_games = st.text_input("Especifique outros jogos", value=st.session_state.user_data['interests'].get('other_games', ''))
         
-        # Favorite teams
-        st.subheader("Favorite Teams")
-        teams_options = ["FURIA", "LOUD", "Team Liquid", "paiN Gaming", "Cloud9", "Fnatic", "G2 Esports", "T1", "FaZe Clan", "Other"]
-        favorite_teams = st.multiselect("Select your favorite teams", teams_options, default=st.session_state.user_data['interests'].get('favorite_teams', []))
+        # Times favoritos
+        st.subheader("Times Favoritos")
+        teams_options = ["FURIA", "LOUD", "Team Liquid", "paiN Gaming", "Cloud9", "Fnatic", "G2 Esports", "T1", "FaZe Clan", "Outro"]
+        favorite_teams = st.multiselect("Selecione seus times favoritos", teams_options, default=st.session_state.user_data['interests'].get('favorite_teams', []))
         
-        if "Other" in favorite_teams:
-            other_teams = st.text_input("Please specify other teams", value=st.session_state.user_data['interests'].get('other_teams', ''))
+        # Inicialize other_teams para corrigir o erro de "possibly unbound"
+        other_teams = ""
+        if "Outro" in favorite_teams:
+            other_teams = st.text_input("Especifique outros times", value=st.session_state.user_data['interests'].get('other_teams', ''))
         
-        # Events attended
-        st.subheader("Events Attended in the Last Year")
-        attended_events = st.text_area("List events you attended (one per line)", value=st.session_state.user_data['interests'].get('attended_events', ''))
+        # Eventos frequentados
+        st.subheader("Eventos Frequentados no Último Ano")
+        attended_events = st.text_area("Liste os eventos que você frequentou (um por linha)", value=st.session_state.user_data['interests'].get('attended_events', ''))
         
-        # Gaming habits
-        st.subheader("Gaming Habits")
-        hours_gaming = st.slider("Hours spent gaming per week", 0, 50, st.session_state.user_data['interests'].get('hours_gaming', 10))
-        hours_watching = st.slider("Hours spent watching esports per week", 0, 30, st.session_state.user_data['interests'].get('hours_watching', 5))
+        # Hábitos de jogo
+        st.subheader("Hábitos de Jogo")
+        hours_gaming = st.slider("Horas jogando por semana", 0, 50, st.session_state.user_data['interests'].get('hours_gaming', 10))
+        hours_watching = st.slider("Horas assistindo esports por semana", 0, 30, st.session_state.user_data['interests'].get('hours_watching', 5))
         
-        # Merchandise purchases
-        st.subheader("Merchandise Purchases")
-        merch_options = ["Team Jerseys", "Team Accessories", "Gaming Equipment", "Collectibles", "None"]
-        merchandise = st.multiselect("Merchandise purchased in the last year", merch_options, default=st.session_state.user_data['interests'].get('merchandise', []))
+        # Compras de produtos
+        st.subheader("Compras de Produtos")
+        merch_options = ["Camisetas de Times", "Acessórios de Times", "Equipamentos de Gaming", "Colecionáveis", "Nenhum"]
+        merchandise = st.multiselect("Produtos comprados no último ano", merch_options, default=st.session_state.user_data['interests'].get('merchandise', []))
         
-        submitted = st.form_submit_button("Save & Continue")
+        submitted = st.form_submit_button("Salvar e Continuar")
         
         if submitted:
             form_data = {
@@ -157,9 +161,9 @@ elif st.session_state.step == 2:
                 'merchandise': merchandise
             }
             
-            if "Other" in favorite_games:
+            if "Outro" in favorite_games:
                 form_data['other_games'] = other_games
-            if "Other" in favorite_teams:
+            if "Outro" in favorite_teams:
                 form_data['other_teams'] = other_teams
             
             save_form_data(form_data, 'interests')
@@ -167,34 +171,34 @@ elif st.session_state.step == 2:
     
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("← Previous"):
+        if st.button("← Voltar"):
             prev_step()
 
-# Step 3: Document Verification
+# Etapa 3: Verificação de Documentos
 elif st.session_state.step == 3:
-    st.header("Document Verification")
+    st.header("Verificação de Documentos")
     
-    # Use columns for better layout
+    # Use colunas para melhor layout
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        st.write("Please upload your identification documents for verification.")
+        st.write("Por favor, carregue seus documentos de identificação para verificação.")
         
-        # ID Document Upload
-        st.subheader("Identity Document")
-        id_doc = st.file_uploader("Upload your ID card (front)", type=["jpg", "jpeg", "png"])
+        # Upload de Documento de Identidade
+        st.subheader("Documento de Identidade")
+        id_doc = st.file_uploader("Carregue seu documento de identidade (frente)", type=["jpg", "jpeg", "png"])
         
         if id_doc:
-            # Display the uploaded document
-            st.image(id_doc, caption="Uploaded ID Document", width=300)
+            # Exibir o documento carregado
+            st.image(id_doc, caption="Documento Carregado", width=300)
             
-            # Process and validate document using OCR
-            if st.button("Validate ID Document"):
-                with st.spinner("Processing document..."):
-                    # Process the document using OCR
+            # Processar e validar documento usando OCR
+            if st.button("Validar Documento"):
+                with st.spinner("Processando documento..."):
+                    # Processar o documento usando OCR
                     extracted_text = process_image_ocr(id_doc)
                     
-                    # Validate the extracted information
+                    # Validar as informações extraídas
                     is_valid, validation_message = validate_document(extracted_text, st.session_state.user_data['personal'])
                     
                     if is_valid:
@@ -206,82 +210,82 @@ elif st.session_state.step == 3:
                         st.session_state.user_data['documents']['id_validated'] = False
                         st.session_state.user_data['documents']['id_validation_message'] = validation_message
         
-        # Secondary document (optional)
-        st.subheader("Secondary Document (Optional)")
-        secondary_doc = st.file_uploader("Upload another document for additional verification", type=["jpg", "jpeg", "png"])
+        # Documento secundário (opcional)
+        st.subheader("Documento Secundário (Opcional)")
+        secondary_doc = st.file_uploader("Carregue outro documento para verificação adicional", type=["jpg", "jpeg", "png"])
         
         if secondary_doc:
-            st.image(secondary_doc, caption="Uploaded Secondary Document", width=300)
+            st.image(secondary_doc, caption="Documento Secundário Carregado", width=300)
 
     with col2:
-        st.subheader("Verification Status")
+        st.subheader("Status de Verificação")
         
-        # Display verification status
+        # Exibir status de verificação
         if st.session_state.user_data['documents'].get('id_validated'):
-            st.success("ID Document Verified ✓")
+            st.success("Documento Verificado ✓")
         else:
-            st.warning("ID Document Not Verified Yet")
+            st.warning("Documento Ainda Não Verificado")
         
-        # Information about the verification process
+        # Informações sobre o processo de verificação
         st.info("""
-        ## Document Verification Process
+        ## Processo de Verificação de Documentos
         
-        1. Upload a clear image of your ID document
-        2. Our AI will process the document
-        3. The information will be cross-checked with your profile
-        4. You'll receive a verification status
+        1. Carregue uma imagem clara do seu documento
+        2. Nossa IA processará o documento
+        3. As informações serão verificadas com seu perfil
+        4. Você receberá um status de verificação
         
-        Valid documents include:
-        - National ID Card
-        - Driver's License
-        - Passport
+        Documentos válidos incluem:
+        - Carteira de Identidade (RG)
+        - Carteira Nacional de Habilitação (CNH)
+        - Passaporte
         """)
     
-    # Navigation buttons
+    # Botões de navegação
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("← Previous"):
+        if st.button("← Voltar"):
             prev_step()
     
     with col2:
-        # Only allow proceeding if the document is validated or user wants to skip
-        if st.session_state.user_data['documents'].get('id_validated') or st.button("Skip Verification"):
+        # Só permitir avançar se o documento for validado ou o usuário quiser pular
+        if st.session_state.user_data['documents'].get('id_validated') or st.button("Pular Verificação"):
             next_step()
 
-# Step 4: Social Media Integration
+# Etapa 4: Integração com Redes Sociais
 elif st.session_state.step == 4:
-    st.header("Social Media & Esports Profiles")
+    st.header("Redes Sociais e Perfis de Esports")
     
     col1, col2 = st.columns([3, 2])
     
     with col1:
         with st.form("social_media_form"):
-            st.subheader("Connect Your Social Media")
+            st.subheader("Conecte Suas Redes Sociais")
             
             # Twitter/X
-            twitter_username = st.text_input("Twitter/X Username", value=st.session_state.user_data['social_media'].get('twitter_username', ''))
+            twitter_username = st.text_input("Usuário do Twitter/X", value=st.session_state.user_data['social_media'].get('twitter_username', ''))
             
             # Instagram
-            instagram_username = st.text_input("Instagram Username", value=st.session_state.user_data['social_media'].get('instagram_username', ''))
+            instagram_username = st.text_input("Usuário do Instagram", value=st.session_state.user_data['social_media'].get('instagram_username', ''))
             
             # Facebook
-            facebook_profile = st.text_input("Facebook Profile URL", value=st.session_state.user_data['social_media'].get('facebook_profile', ''))
+            facebook_profile = st.text_input("URL do Perfil do Facebook", value=st.session_state.user_data['social_media'].get('facebook_profile', ''))
             
             # Discord
-            discord_username = st.text_input("Discord Username", value=st.session_state.user_data['social_media'].get('discord_username', ''))
+            discord_username = st.text_input("Usuário do Discord", value=st.session_state.user_data['social_media'].get('discord_username', ''))
             
-            st.subheader("Esports Platform Profiles")
+            st.subheader("Perfis em Plataformas de Esports")
             
             # Twitch
-            twitch_username = st.text_input("Twitch Username", value=st.session_state.user_data['esports_profiles'].get('twitch_username', ''))
+            twitch_username = st.text_input("Usuário da Twitch", value=st.session_state.user_data['esports_profiles'].get('twitch_username', ''))
             
             # Steam
-            steam_profile = st.text_input("Steam Profile URL", value=st.session_state.user_data['esports_profiles'].get('steam_profile', ''))
+            steam_profile = st.text_input("URL do Perfil Steam", value=st.session_state.user_data['esports_profiles'].get('steam_profile', ''))
             
-            # Other gaming platforms
-            other_platforms = st.text_area("Other Gaming Platforms (Platform: Username)", value=st.session_state.user_data['esports_profiles'].get('other_platforms', ''))
+            # Outras plataformas de jogos
+            other_platforms = st.text_area("Outras Plataformas de Jogos (Plataforma: Usuário)", value=st.session_state.user_data['esports_profiles'].get('other_platforms', ''))
             
-            submitted = st.form_submit_button("Connect & Analyze")
+            submitted = st.form_submit_button("Conectar e Analisar")
             
             if submitted:
                 social_media_data = {
@@ -297,123 +301,123 @@ elif st.session_state.step == 4:
                     'other_platforms': other_platforms
                 }
                 
-                # Check if at least one social media profile is provided
+                # Verificar se pelo menos um perfil de rede social foi fornecido
                 if any(social_media_data.values()):
                     save_form_data(social_media_data, 'social_media')
                     
-                    # Simulate social media analysis
-                    with st.spinner("Analyzing social media profiles..."):
+                    # Simular análise de redes sociais
+                    with st.spinner("Analisando perfis de redes sociais..."):
                         social_media_info = extract_social_media_info(social_media_data)
                         st.session_state.user_data['social_media']['analysis'] = social_media_info
-                        st.success("Social media profiles analyzed successfully!")
+                        st.success("Perfis de redes sociais analisados com sucesso!")
                 else:
-                    st.warning("Please provide at least one social media profile.")
+                    st.warning("Por favor, forneça pelo menos um perfil de rede social.")
                 
-                # Check if at least one esports profile is provided
+                # Verificar se pelo menos um perfil de esports foi fornecido
                 if any(esports_profiles_data.values()):
                     save_form_data(esports_profiles_data, 'esports_profiles')
                     
-                    # Simulate esports profile analysis
-                    with st.spinner("Analyzing esports profiles..."):
+                    # Simular análise de perfil de esports
+                    with st.spinner("Analisando perfis de esports..."):
                         esports_relevance = analyze_social_relevance(esports_profiles_data, st.session_state.user_data['interests'])
                         st.session_state.user_data['esports_profiles']['relevance'] = esports_relevance
-                        st.success("Esports profiles analyzed successfully!")
+                        st.success("Perfis de esports analisados com sucesso!")
                 else:
-                    st.warning("Please provide at least one esports profile.")
+                    st.warning("Por favor, forneça pelo menos um perfil de esports.")
     
     with col2:
-        st.subheader("Why Connect Social Media?")
+        st.subheader("Por que Conectar Redes Sociais?")
         st.info("""
-        ## Benefits of Connecting
+        ## Benefícios de Conectar
         
-        1. **Personalized Experiences**: Get customized content based on your esports interests.
+        1. **Experiências Personalizadas**: Receba conteúdo personalizado com base em seus interesses em esports.
         
-        2. **Community Access**: Join exclusive fan communities for your favorite teams.
+        2. **Acesso à Comunidade**: Junte-se a comunidades exclusivas de fãs dos seus times favoritos.
         
-        3. **Special Offers**: Receive targeted offers for events and merchandise.
+        3. **Ofertas Especiais**: Receba ofertas direcionadas para eventos e produtos.
         
-        4. **Profile Validation**: Verify your status as a genuine esports enthusiast.
+        4. **Validação de Perfil**: Verifique seu status como um entusiasta genuíno de esports.
         
-        Your data is protected and only used to enhance your fan experience.
+        Seus dados são protegidos e usados apenas para melhorar sua experiência como fã.
         """)
         
-        # Display a sample esports fan image
-        st.image("https://images.unsplash.com/photo-1513151233558-d860c5398176", caption="Esports fans celebrating at an event", use_column_width=True)
+        # Exibir uma imagem de amostra de fãs de esports
+        st.image("https://images.unsplash.com/photo-1513151233558-d860c5398176", caption="Fãs de esports celebrando em um evento", use_column_width=True)
     
-    # Social media analysis results (if available)
+    # Resultados da análise de redes sociais (se disponível)
     if 'analysis' in st.session_state.user_data['social_media']:
-        st.subheader("Social Media Analysis Results")
+        st.subheader("Resultados da Análise de Redes Sociais")
         
         analysis = st.session_state.user_data['social_media']['analysis']
         
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.metric("Esports Related Posts", analysis.get('esports_posts', 'N/A'))
+            st.metric("Posts Relacionados a Esports", analysis.get('esports_posts', 'N/A'))
         with col2:
-            st.metric("Team Mentions", analysis.get('team_mentions', 'N/A'))
+            st.metric("Menções a Times", analysis.get('team_mentions', 'N/A'))
         with col3:
-            st.metric("Engagement Score", analysis.get('engagement_score', 'N/A'))
+            st.metric("Pontuação de Engajamento", analysis.get('engagement_score', 'N/A'))
     
-    # Esports profile relevance (if available)
+    # Relevância do perfil de esports (se disponível)
     if 'relevance' in st.session_state.user_data['esports_profiles']:
-        st.subheader("Esports Profile Relevance")
+        st.subheader("Relevância do Perfil de Esports")
         
         relevance = st.session_state.user_data['esports_profiles']['relevance']
         
         col1, col2 = st.columns(2)
         with col1:
-            st.metric("Relevance Score", f"{relevance.get('relevance_score', 0)}/10")
+            st.metric("Pontuação de Relevância", f"{relevance.get('relevance_score', 0)}/10")
         with col2:
-            st.metric("Confidence Level", relevance.get('confidence', 'Medium'))
+            st.metric("Nível de Confiança", relevance.get('confidence', 'Médio'))
     
-    # Navigation buttons
+    # Botões de navegação
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("← Previous"):
+        if st.button("← Voltar"):
             prev_step()
     
     with col2:
-        if st.button("View Dashboard"):
+        if st.button("Ver Painel"):
             next_step()
 
-# Step 5: Dashboard
+# Etapa 5: Painel
 elif st.session_state.step == 5:
-    st.header("Your Fan Profile Dashboard")
+    st.header("Seu Painel de Perfil de Fã")
     
-    # Check if we have user data to display
+    # Verificar se temos dados do usuário para exibir
     if st.session_state.user_data['personal'].get('name'):
-        st.subheader(f"Welcome, {st.session_state.user_data['personal']['name']}!")
+        st.subheader(f"Bem-vindo, {st.session_state.user_data['personal']['name']}!")
         
-        # Profile summary
+        # Resumo do perfil
         col1, col2 = st.columns([1, 3])
         
         with col1:
-            # Display a gaming setup image as profile picture
+            # Exibir uma imagem de configuração de jogo como foto de perfil
             st.image("https://images.unsplash.com/photo-1598550457678-aa60413d7c80", use_column_width=True)
             
-            # Display verification status
+            # Exibir status de verificação
             if st.session_state.user_data['documents'].get('id_validated'):
-                st.success("✓ Verified Fan")
+                st.success("✓ Fã Verificado")
             else:
-                st.warning("⚠ Unverified Fan")
+                st.warning("⚠ Fã Não Verificado")
             
-            # Basic information
-            st.markdown("### Basic Info")
+            # Informações básicas
+            st.markdown("### Informações Básicas")
             if 'personal' in st.session_state.user_data:
                 personal = st.session_state.user_data['personal']
-                st.markdown(f"**Email:** {personal.get('email', 'Not provided')}")
-                st.markdown(f"**Location:** {personal.get('city', '')} {', ' + personal.get('state', '') if personal.get('state') else ''}")
+                st.markdown(f"**Email:** {personal.get('email', 'Não fornecido')}")
+                st.markdown(f"**Localização:** {personal.get('city', '')} {', ' + personal.get('state', '') if personal.get('state') else ''}")
         
         with col2:
-            # Fan interests visualization
-            st.markdown("### Your Esports Interests")
+            # Visualização de interesses do fã
+            st.markdown("### Seus Interesses em Esports")
             
             if 'interests' in st.session_state.user_data and st.session_state.user_data['interests']:
-                # Create interest chart
+                # Criar gráfico de interesses
                 fig = create_interest_chart(st.session_state.user_data['interests'])
                 st.plotly_chart(fig, use_container_width=True)
             else:
-                st.info("No interest data available. Complete step 2 to see your interests visualization.")
+                st.info("Nenhum dado de interesse disponível. Complete a etapa 2 para ver a visualização de seus interesses.")
         
         # Social media insights
         st.markdown("### Social Media Insights")
