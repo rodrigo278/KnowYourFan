@@ -53,17 +53,17 @@ def validate_document(extracted_text, personal_info):
     if not extracted_text:
         return False, "Não foi possível extrair texto do documento. Por favor, carregue uma imagem mais clara."
     
-    # Check if the name from personal info appears in the document
+    # Verificar se o nome das informações pessoais aparece no documento
     name = personal_info.get('name', '').strip().lower()
-    if name and len(name) > 3:  # Make sure we have a valid name to check
+    if name and len(name) > 3:  # Certificar-se de que temos um nome válido para verificar
         if name in extracted_text.lower():
-            # Attempt to find CPF in the extracted text
+            # Tentar encontrar CPF no texto extraído
             cpf = personal_info.get('cpf', '').strip()
             if cpf:
-                # Remove any formatting from CPF for comparison
+                # Remover qualquer formatação do CPF para comparação
                 cpf_clean = re.sub(r'[^\d]', '', cpf)
                 
-                # Look for CPF pattern in the text
+                # Procurar padrão de CPF no texto
                 cpf_pattern = r'\d{3}\.?\d{3}\.?\d{3}-?\d{2}'
                 found_cpfs = re.findall(cpf_pattern, extracted_text)
                 
